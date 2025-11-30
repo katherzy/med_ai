@@ -108,12 +108,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libstdc++6 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy Python packages from builder
-COPY --from=builder /root/.local /root/.local
-ENV PATH=/root/.local/bin:$PATH
-
 # Create non-root user for security
 RUN useradd --create-home --shell /bin/bash appuser
+
+# Copy Python packages from builder to appuser's home with proper ownership
+COPY --from=builder --chown=appuser:appuser /root/.local /home/appuser/.local
+ENV PATH=/home/appuser/.local/bin:$PATH
+
 USER appuser
 WORKDIR /home/appuser/app
 
