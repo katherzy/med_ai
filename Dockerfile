@@ -59,22 +59,25 @@
 #CMD ["streamlit","run","chatbot.py","--server.port","8501","--server.address","0.0.0.0"]
 
 
-FROM python:3.12-slim
-WORKDIR /app
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential git curl pkg-config cmake libsndfile1 libopenblas-dev liblapack-dev libstdc++6 && rm -rf /var/lib/apt/lists/*
-COPY requirements.txt /app/
-RUN pip install torch --index-url https://download.pytorch.org/whl/cpu
-RUN pip install --no-cache-dir -r requirements.txt
+#FROM python:3.12-slim
+#WORKDIR /app
+#RUN apt-get update && apt-get install -y --no-install-recommends build-essential git curl pkg-config cmake libsndfile1 libopenblas-dev liblapack-dev libstdc++6 && rm -rf /var/lib/apt/lists/*
+#COPY requirements.txt /app/
+#RUN pip install torch --index-url https://download.pytorch.org/whl/cpu
+#RUN pip install --no-cache-dir -r requirements.txt
 
-COPY chatbot.py create_vector_db.py utils.py README.md ./
-COPY data/ ./data
-ENV PYTHONUNBUFFERED=1
-EXPOSE 8501
-CMD ["/bin/bash"]
+#COPY chatbot.py create_vector_db.py utils.py README.md ./
+#COPY data/ ./data
+#ENV PYTHONUNBUFFERED=1
+#EXPOSE 8501
+#CMD ["/bin/bash"]
+
+
 #CMD ["streamlit","run","chatbot.py","--server.port","8501","--server.address","0.0.0.0"]
 
 
 
+# Multi-stage build for smaller image size
 # Multi-stage build for smaller image size
 FROM python:3.12-slim AS builder
 
@@ -94,32 +97,41 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Copy requirements and install dependencies
 COPY requirements.txt .
+
+# Install torch first with CPU-only version
 RUN pip install --no-cache-dir --user torch --index-url https://download.pytorch.org/whl/cpu
-RUN pip install --no-cache-dir --user -r requirements.txt
+
+# Install remaining requirements, skipping torch and NVIDIA packages
+RUN pip install --no-cache-dir --user -r requirements.txt || \
+    grep -v '^torch==' requirements. txt | grep -v '^nvidia-' | pip install --no-cache-dir --user -r /dev/stdin
 
 # Runtime stage
 FROM python:3.12-slim
-
-WORKDIR /app
 
 # Install only runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libsndfile1 \
     libstdc++6 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy Python packages from builder
-COPY --from=builder /root/.local /root/.local
-ENV PATH=/root/.local/bin:$PATH
-
-# Create non-root user for security
+# Create non-root user FIRST
 RUN useradd --create-home --shell /bin/bash appuser
+
+# Copy Python packages from builder to appuser's directory (FIX HERE)
+COPY --from=builder --chown=appuser:appuser /root/.local /home/appuser/.local
+
+# Switch to non-root user
 USER appuser
 WORKDIR /home/appuser/app
+
+# Set PATH to use appuser's local bin
+ENV PATH=/home/appuser/.local/bin:$PATH
 
 # Copy application files
 COPY --chown=appuser:appuser chatbot.py create_vector_db.py utils.py README.md ./
 COPY --chown=appuser:appuser data/ ./data/
+COPY --chown=appuser:appuser .streamlit/ . /.streamlit/
 
 # Environment variables
 ENV PYTHONUNBUFFERED=1 \
@@ -131,9 +143,7 @@ EXPOSE 8501
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8501/_stcore/health || exit 1
 
-CMD ["streamlit", "run", "chatbot.py", "--server.port", "8501", "--server.address", "0.0.0.0"]
-
-
+CMD ["streamlit", "run", "chatbot.py", "--server.port", "8501", "--server.address", "0. 0.0.0"]
 
 # docker build -t med_ai_uv .
 # docker run -it --rm -v $(pwd):/app med_ai_uv
@@ -150,4 +160,13 @@ CMD ["streamlit", "run", "chatbot.py", "--server.port", "8501", "--server.addres
 # docker run -it --rm -p 8501:8501 med_ai_uv
 # docker run -it --rm -v $(pwd):/app -p 8501:8501 med_ai_uv
 # streamlit run chatbot.py --server.port 8501 --server.address 0.0.0.0
+
+#use this
+#docker run -it --rm \
+ #  -v $(pwd):/home/appuser/app \
+ #  -p 8501:8501 \
+ #  med_ai_uv \
+ #  streamlit run chatbot.py --server.port 8501 --server.address 0.0.0.0 --server.headless true
+
+
 # curl -I https://huggingface.co
