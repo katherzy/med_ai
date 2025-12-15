@@ -2,6 +2,7 @@
 medical chatbot wip.
 
 chatbot flow:
+
 <img width="680" height="521" alt="Screenshot 2025-12-15 at 4 18 11 PM" src="https://github.com/user-attachments/assets/834d3c83-fd99-490c-a633-73b7b1c74af7" />
 
 
