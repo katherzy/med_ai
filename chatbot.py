@@ -16,6 +16,17 @@ try:
 except:
     PdfReader = None
 
+# Import utility constants
+from utils import (
+    SEVERE_KEYWORDS,
+    URGENT_KEYWORDS,
+    RECORD_ESCALATORS,
+    MENS_TREAT_AND_RELEASE,
+    WOMENS_TREAT_AND_RELEASE,
+    ER,
+    URGENT_CARE
+)
+
 # Global Constants
 DB_FAISS_PATH = "vector_db/db_faiss"
 EMBEDDING_MODEL_NAME = 'sentence-transformers/all-MiniLM-L6-v2'
@@ -35,82 +46,6 @@ TRIAGE_QUESTIONS = [
     ("duration", "How long have you had this symptom? (hours / days)"),
     ("age", "How old is the patient?"),
     ("other", "Any other symptoms or medical conditions? (pregnancy, immunocompromised, blood thinners, etc.)"),
-]
-
-SEVERE_KEYWORDS = [
-    "chest pain", "difficulty breathing", "shortness of breath", "unconscious",
-    "loss of consciousness", "stroke", "slurred speech", "sudden weakness",
-    "severe bleeding", "not breathing"
-]
-
-URGENT_KEYWORDS = [
-    "high fever", "fever", "persistent vomiting", "severe pain", "deep cut",
-    "possible fracture", "infected", "worsening", "dehydration"
-]
-
-RECORD_ESCALATORS = [
-    "heart disease", "myocardial", "anticoagulant", "blood thinner",
-    "immunocompromised", "chemotherapy", "pregnant", "organ transplant",
-    "arrhythmia", "stroke history"
-]
-
-# Lists based on ccmedicalcenter.com article: Top reasons people visit the ER
-MENS_TREAT_AND_RELEASE = [
-    "open wounds to the head",
-    "open wounds to the neck",
-    "open wounds to the limbs",
-    "head injury",
-    "neck injury",
-    "limb injury"
-]
-
-WOMENS_TREAT_AND_RELEASE = [
-    "urinary tract infection",
-    "UTI",
-    "headache",
-    "migraine",
-    "pregnancy-related issues",
-    "pregnancy complications"
-]
-
-ER = [
-    "allergic reactions with trouble breathing",
-    "severe swelling from allergic reaction",
-    "broken bones",
-    "dislocations",
-    "loss of vision",
-    "double vision",
-    "choking",
-    "electric shock",
-    "severe head injury",
-    "heart attack symptoms",
-    "chest pain with shortness of breath",
-    "high fever over 103F",
-    "fever with rash",
-    "loss of consciousness",
-    "mental health crisis",
-    "self-harm",
-    "harm to others",
-    "poisoning",
-    "seizures",
-    "severe abdominal pain"
-]
-
-URGENT_CARE = [
-    "minor cuts",
-    "minor wounds",
-    "superficial injuries",
-    "mild fever",
-    "upper respiratory infection",
-    "bronchiolitis",
-    "mild asthma attack",
-    "middle ear infection",
-    "viral infection",
-    "minor musculoskeletal pain",
-    "minor back pain",
-    "non-severe headache",
-    "mild abdominal pain",
-    "vomiting without severe dehydration"
 ]
 
 CUSTOM_PROMPT_TEMPLATE = """
