@@ -54,6 +54,65 @@ RECORD_ESCALATORS = [
     "arrhythmia", "stroke history"
 ]
 
+# Lists based on ccmedicalcenter.com article: Top reasons people visit the ER
+MENS_TREAT_AND_RELEASE = [
+    "open wounds to the head",
+    "open wounds to the neck",
+    "open wounds to the limbs",
+    "head injury",
+    "neck injury",
+    "limb injury"
+]
+
+WOMENS_TREAT_AND_RELEASE = [
+    "urinary tract infection",
+    "UTI",
+    "headache",
+    "migraine",
+    "pregnancy-related issues",
+    "pregnancy complications"
+]
+
+ER = [
+    "allergic reactions with trouble breathing",
+    "severe swelling from allergic reaction",
+    "broken bones",
+    "dislocations",
+    "loss of vision",
+    "double vision",
+    "choking",
+    "electric shock",
+    "severe head injury",
+    "heart attack symptoms",
+    "chest pain with shortness of breath",
+    "high fever over 103F",
+    "fever with rash",
+    "loss of consciousness",
+    "mental health crisis",
+    "self-harm",
+    "harm to others",
+    "poisoning",
+    "seizures",
+    "severe abdominal pain"
+]
+
+URGENT_CARE = [
+    "minor cuts",
+    "minor wounds",
+    "superficial injuries",
+    "mild fever",
+    "upper respiratory infection",
+    "bronchiolitis",
+    "mild asthma attack",
+    "middle ear infection",
+    "viral infection",
+    "minor musculoskeletal pain",
+    "minor back pain",
+    "non-severe headache",
+    "mild abdominal pain",
+    "vomiting without severe dehydration"
+]
+
 CUSTOM_PROMPT_TEMPLATE = """
 Use the pieces of information provided in the context to answer user's question.
 If you dont know the answer, just say that you dont know, dont try to make up an answer.
