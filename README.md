@@ -3,6 +3,8 @@ medical chatbot wip.
 
 Up to 60% of ER visits are less-urgent or non-urgent (https://pmc.ncbi.nlm.nih.gov/articles/PMC9880025/). Optimizing care pathways helps ensure emergency departments are reserved for true emergencies. The goal is to ensure every patient receives the right care, in the right place, at the right time. This chatbot aims to guide users to either the ER or urgent care or a doctor's visit dependent on user responses. 
 
+For non-emergent issues, the most common reasons relate to access: lack of a relationship with a primary care provider or care team, lack of after-hours or timely access to a provider, or barriers to access such as transportation. For other ED visits deemed avoidable, the reasons may be more complex, including inadequate chronic care management or gaps in care coordination among multiple locations of care. https://www.cms.gov/priorities/innovation/files/x/tcpi-changepkgmod-edvisits.pdf
+
 --> Optimized care pathways for the community and potential cost savings for the individual.
 
 chatbot flow:
