@@ -16,6 +16,17 @@ try:
 except:
     PdfReader = None
 
+# Import utility constants
+from utils import (
+    SEVERE_KEYWORDS,
+    URGENT_KEYWORDS,
+    RECORD_ESCALATORS,
+    MENS_TREAT_AND_RELEASE,
+    WOMENS_TREAT_AND_RELEASE,
+    ER,
+    URGENT_CARE
+)
+
 # Global Constants
 DB_FAISS_PATH = "vector_db/db_faiss"
 EMBEDDING_MODEL_NAME = 'sentence-transformers/all-MiniLM-L6-v2'
@@ -35,23 +46,6 @@ TRIAGE_QUESTIONS = [
     ("duration", "How long have you had this symptom? (hours / days)"),
     ("age", "How old is the patient?"),
     ("other", "Any other symptoms or medical conditions? (pregnancy, immunocompromised, blood thinners, etc.)"),
-]
-
-SEVERE_KEYWORDS = [
-    "chest pain", "difficulty breathing", "shortness of breath", "unconscious",
-    "loss of consciousness", "stroke", "slurred speech", "sudden weakness",
-    "severe bleeding", "not breathing"
-]
-
-URGENT_KEYWORDS = [
-    "high fever", "fever", "persistent vomiting", "severe pain", "deep cut",
-    "possible fracture", "infected", "worsening", "dehydration"
-]
-
-RECORD_ESCALATORS = [
-    "heart disease", "myocardial", "anticoagulant", "blood thinner",
-    "immunocompromised", "chemotherapy", "pregnant", "organ transplant",
-    "arrhythmia", "stroke history"
 ]
 
 CUSTOM_PROMPT_TEMPLATE = """
